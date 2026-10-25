@@ -16,10 +16,11 @@ Os dados de cada cliente ficam no sistema dele e só passam por aqui na hora de 
 
 ## Como cada sistema usa
 
-No `requirements.txt` do sistema, com a versão fixa:
+No `requirements.txt` do sistema, com a versão fixa pelo envio (commit) — nunca o `main`, para uma mudança aqui não
+entrar sozinha num sistema:
 
 ```
-injex-comum @ https://github.com/injexsolucoes/injex-comum/archive/refs/tags/v1.0.0.zip
+injex-comum @ https://github.com/injexsolucoes/injex-comum/archive/b9849e1b2e1ac43d9d5763fc4896818eb18a0d6a.zip
 ```
 
 O sistema baixa a versão **na hora de atualizar** (o `atualizar.sh` de cada um já instala as bibliotecas) e guarda
@@ -28,8 +29,8 @@ uma cópia. Os sites nunca buscam nada daqui enquanto alguém está navegando.
 ## Versão nova
 
 1. Mudar aqui, rodar os testes (`python -m pytest`) e subir.
-2. Trocar `VERSAO` (em `injex_comum/__init__.py`) e `version` (em `pyproject.toml`), e criar a tag (`v1.1.0`).
-3. Em cada sistema, trocar a versão no `requirements.txt`, testar e atualizar. Um sistema por vez.
+2. Trocar `VERSAO` (em `injex_comum/__init__.py`) e `version` (em `pyproject.toml`), e subir.
+3. Em cada sistema, trocar o código do envio (commit) no `requirements.txt`, testar e atualizar. Um sistema por vez.
 
 ## Licenças
 
