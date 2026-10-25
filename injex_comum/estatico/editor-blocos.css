@@ -1,0 +1,56 @@
+/* 🧱 Editor de blocos do injex-comum (editor-blocos.js). Usa as cores da tela onde está, se ela tiver:
+   --ibe-cor (a cor da marca), --ibe-linha, --ibe-papel, --ibe-suave. Tudo com classes ibe- (não mexe no resto da tela). */
+.ibe { --_c: var(--ibe-cor, var(--cor, #2f4f4f)); --_l: var(--ibe-linha, var(--linha, #e3e3e3)); --_p: var(--ibe-papel, #f6f6f4);
+  --_s: var(--ibe-suave, #6b6b6b); display: grid; gap: 10px; min-width: 0; }
+.ibe * { box-sizing: border-box; }
+.ibe-ic { width: 18px; height: 18px; flex: none; vertical-align: -3px; }
+.ibe-emoji { font-size: 20px; line-height: 1; }
+.ibe-bt { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 36px; padding: 6px 12px;
+  border: 1px solid var(--_l); border-radius: 10px; background: #fff; color: inherit; font: inherit; font-size: 14px; cursor: pointer; }
+.ibe-bt:hover:not(:disabled) { border-color: var(--_c); }
+.ibe-bt:disabled { opacity: .4; cursor: default; }
+.ibe-bt.atual { border-color: var(--_c); background: color-mix(in srgb, var(--_c) 10%, #fff); }
+.ibe-bloco { border: 1px solid var(--_l); border-radius: 14px; padding: 10px 12px; background: #fff; min-width: 0; }
+.ibe-bloco.livre { border-color: color-mix(in srgb, var(--_c) 35%, var(--_l)); }
+.ibe-topo { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.ibe-topo > b { flex: 1; min-width: 140px; display: inline-flex; align-items: center; gap: 6px; }
+.ibe-detalhe { font-weight: 400; color: var(--_s); font-size: 13px; }
+.ibe-ordem { display: inline-flex; gap: 4px; }
+.ibe-ordem .ibe-bt { min-width: 36px; padding: 6px 8px; }
+.ibe-dica { margin: 6px 0 0; font-size: 13px; color: var(--_s); }
+.ibe-acoes { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.ibe-ajustes { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); margin: 10px 0; }
+.ibe-campo { display: grid; gap: 4px; font-size: 13px; min-width: 0; }
+.ibe-campo input, .ibe-campo textarea, .ibe-campo select, .ibe-busca { width: 100%; min-width: 0; font: inherit; font-size: 15px;
+  padding: 8px 10px; border: 1px solid var(--_l); border-radius: 10px; background: #fff; }
+.ibe-colunas { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .ibe-colunas.n2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ibe-colunas.n3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.ibe-coluna { min-width: 0; border: 1px dashed var(--_l); border-radius: 12px; padding: 8px; }
+.ibe-grupo { margin: 2px 0 6px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--_s); }
+.ibe-el { background: var(--_p); border-radius: 10px; padding: 8px; margin-bottom: 8px; display: grid; gap: 6px; min-width: 0; }
+.ibe-add-el { width: 100%; }
+.ibe-painel { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(min(128px, 100%), 1fr)); margin-top: 8px; }
+.ibe-cartao { display: grid; justify-items: center; gap: 2px; text-align: center; padding: 10px 6px; min-height: 0; }
+.ibe-cartao-ic { color: var(--_c); } .ibe-cartao-ic .ibe-ic { width: 26px; height: 26px; }
+.ibe-cartao b { font-size: 13px; } .ibe-cartao small { font-size: 11px; color: var(--_s); line-height: 1.3; }
+.ibe-foto img { width: 100%; max-width: 180px; object-fit: cover; border-radius: 10px; display: block; }
+.ibe-escolher { display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); margin-top: 6px; }
+.ibe-escolher .ibe-bt { padding: 0; aspect-ratio: 1; overflow: hidden; border-width: 2px; border-color: transparent; background: #eee; }
+.ibe-escolher .ibe-bt.atual { border-color: var(--_c); }
+.ibe-escolher img, .ibe-mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ibe-escolhidas { display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); }
+.ibe-mini { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: #eee; }
+.ibe-mini-bts { position: absolute; inset: auto 0 0 0; display: flex; justify-content: space-between; padding: 3px; background: rgba(0,0,0,.45); }
+.ibe-mini-bts .ibe-bt { min-height: 24px; padding: 0 6px; font-size: 12px; border: 0; background: rgba(255,255,255,.9); }
+.ibe-carregando { opacity: .55; pointer-events: none; }
+.ibe-icone-atual { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ibe-bola { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; color: var(--_c); background: color-mix(in srgb, var(--_c) 12%, #fff); }
+.ibe-bola .ibe-ic { width: 26px; height: 26px; }
+.ibe-grade-icones { display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); max-height: 320px; overflow-y: auto; margin-top: 6px; }
+.ibe-grade-icones .ibe-bt { display: grid; justify-items: center; gap: 2px; padding: 8px 2px; color: var(--_c); }
+.ibe-grade-icones .ibe-ic { width: 26px; height: 26px; }
+.ibe-grade-icones small { font-size: 10px; color: var(--_s); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ibe-faq { display: grid; gap: 4px; padding-bottom: 8px; border-bottom: 1px dashed var(--_l); }
+.ibe-add { border: 2px dashed var(--_l); border-radius: 14px; padding: 10px 12px; }
+.ibe-add > b { display: inline-flex; align-items: center; gap: 6px; }
+@media (max-width: 480px) { .ibe-topo > b { flex-basis: 100%; } }

@@ -60,3 +60,58 @@ def test_texto_segue_o_que_esta_ligado():
 def test_aviso_de_cookies():
     a = legal.aviso_cookies("/x/cookies", "loja_cookies_ok", "Esta loja")
     assert 'href="/x/cookies"' in a and "'loja_cookies_ok'" in a and "Esta loja usa" in a
+
+
+# ---------------------------------------------------------------- 🧱 blocos
+from injex_comum import blocos  # noqa: E402
+
+
+def _livre(*elementos, colunas=1, **extra):
+    return {"id": "x1", "tipo": "livre", "colunas": colunas, "itens": [list(elementos)] + [[] for _ in range(colunas - 1)], **extra}
+
+
+def test_blocos_validar_limpa_e_limita():
+    lista = [{"tipo": "secao", "secao": "banners"}, {"tipo": "secao", "secao": "banners"}, {"tipo": "secao", "secao": "inventada"},
+             _livre({"tipo": "titulo", "texto": "  Oi   {nome} "}, {"tipo": "foto", "foto": "nao-e-minha.jpg"},
+                    {"tipo": "botao", "acao": "agendar"}, {"tipo": "botao", "acao": "link", "link": "loja.com.br/x"},
+                    {"tipo": "video", "video": "https://youtu.be/dQw4w9WgXcQ"}, {"tipo": "icone", "icone": "pizza"},
+                    {"tipo": "nao-existe"}, fundo="roxo")]
+    v = blocos.validar(lista, ["banners"], {"minha.jpg"}, acoes=("whatsapp", "link"))
+    assert [b.get("secao") for b in v] == ["banners", None]
+    els = v[1]["itens"][0]
+    assert els[0]["texto"] == "Oi {nome}" and els[1]["foto"] == "" and els[2]["acao"] == "whatsapp"   # ação que não vale → a 1ª
+    assert els[3]["link"] == "https://loja.com.br/x" and els[4]["video"] == "dQw4w9WgXcQ" and els[5]["icone"] == "pizza"
+    assert len(els) == 6 and v[1]["fundo"] == "auto"
+    assert blocos.validar(None, [], set()) is None
+    with pytest.raises(blocos.ErroBlocos):
+        blocos.validar([_livre({"tipo": "botao", "acao": "link", "link": "javascript:alert(1)"})], [], set())
+    with pytest.raises(blocos.ErroBlocos):
+        blocos.validar([_livre(*[{"tipo": "divisor"}] * 13)], [], set())
+    assert blocos.fotos_usadas([_livre({"tipo": "foto", "foto": "a"}, {"tipo": "galeria", "fotos": ["b", "c"]})]) == {"a", "b", "c"}
+
+
+def test_blocos_montar():
+    v = blocos.validar([{"tipo": "secao", "secao": "cardapio"},
+                        _livre({"tipo": "titulo", "texto": "<b>{nome}</b>", "rotulo": "Novo"}, {"tipo": "botao", "acao": "cardapio"},
+                               {"tipo": "galeria", "fotos": ["f1"]}, {"tipo": "lista", "itens": ["Wi-fi", ""]}),
+                        _livre({"tipo": "espaco"})], ["cardapio"], {"f1"}, acoes=("cardapio", "whatsapp", "link"))
+    html = blocos.montar(v, lambda s: '<div id="cardapio"></div>' if s == "cardapio" else "",
+                         lambda t: t.replace("{nome}", "Lanches"), {"cardapio": "#cardapio", "whatsapp": "https://wa.me/1"},
+                         lambda k: f"/foto/{k}")
+    assert html.startswith('<div id="cardapio"></div><section') and "alterna" in html   # 2º que aparece = fundo alternado
+    assert "&lt;b&gt;Lanches&lt;/b&gt;" in html and 'href="#cardapio"' in html and "Ver o cardápio" in html
+    assert 'data-grande="/foto/f1"' in html and html.count("<li>") == 1
+    assert html.count("<section") == 1                                # bloco só com espaço não aparece
+    emoji = blocos.montar_livre(v[1], str, {}, str, I=lambda n: icones.svg(n, "emoji"))
+    assert "ic-emoji" in emoji
+    assert 'href="#cardapio"' not in emoji                            # sem endereço para a ação e sem WhatsApp: some
+
+
+def test_arquivos_da_tela():
+    for nome in blocos.ARQUIVOS:
+        assert len(blocos.arquivo(nome)) > 500
+    with pytest.raises(KeyError):
+        blocos.arquivo("../legal.py")
+    js = blocos.arquivo("editor-blocos.js")
+    for el in blocos.ELEMENTOS:                                       # o editor conhece os mesmos elementos
+        assert f"['{el}'," in js

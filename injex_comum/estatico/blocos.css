@@ -1,0 +1,97 @@
+/* 🧱 Blocos livres do injex-comum (blocos.py) — iguais em todos os sites da Injex.
+   Responsivos sempre (regra da dona): o bloco decide as colunas e a proporção das fotos; no celular as colunas ficam
+   uma embaixo da outra e nada passa da largura da tela.
+   Cada site só diz as cores e as letras dele nestas variáveis (no :root ou no body):
+   --ib-cor, --ib-cor-texto (texto em cima da cor), --ib-destaque, --ib-papel, --ib-tinta, --ib-suave, --ib-linha,
+   --ib-sombra, --ib-titulo, --ib-corpo, --ib-largura, --ib-espaco, --ib-raio, --ib-raio-botao. */
+.bloco-livre {
+  --_cor: var(--ib-cor, #2f4f4f); --_cor-texto: var(--ib-cor-texto, #fff); --_destaque: var(--ib-destaque, var(--_cor));
+  --_papel: var(--ib-papel, #fff); --_tinta: var(--ib-tinta, inherit); --_suave: var(--ib-suave, #66666b);
+  --_linha: var(--ib-linha, #e5e5e5); --_sombra: var(--ib-sombra, 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06));
+  --_raio: var(--ib-raio, 18px);
+  padding: var(--ib-espaco, 64px) 0; color: var(--_tinta); font-family: var(--ib-corpo, inherit); overflow-wrap: anywhere;
+}
+.bloco-livre * { box-sizing: border-box; }
+.bloco-livre img { max-width: 100%; display: block; }
+.bloco-livre.alterna { background: var(--_papel); border-top: 1px solid var(--_linha); border-bottom: 1px solid var(--_linha); }
+.bloco-livre.fundo-cor { background: var(--_cor); color: var(--_cor-texto); }
+.bloco-livre .ib-miolo { max-width: var(--ib-largura, 1080px); margin: 0 auto; padding: 0 16px; }
+.grade-bloco { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 640px) { .grade-bloco.cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 760px) { .grade-bloco.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 960px) { .grade-bloco.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.bloco-livre .coluna { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.bloco-livre .alin-centro .coluna { align-items: center; text-align: center; }
+.bloco-livre h2 { margin: 0; font-family: var(--ib-titulo, inherit); font-weight: 600; line-height: 1.15; letter-spacing: -.01em;
+  font-size: clamp(26px, 4.2vw, 40px); overflow-wrap: anywhere; }
+.bloco-livre .ib-rotulo { display: inline-flex; align-items: center; gap: 10px; margin-bottom: -6px; font-size: 12px; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--_destaque); }
+.bloco-livre .ib-rotulo::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+.bloco-livre .alin-centro .ib-rotulo { justify-content: center; }
+.bloco-livre.fundo-cor .ib-rotulo { color: inherit; opacity: .85; }
+.texto-livre { max-width: 68ch; line-height: 1.6; }
+.texto-livre p { margin: 0 0 12px; } .texto-livre p:last-child { margin-bottom: 0; }
+.foto-livre { width: 100%; aspect-ratio: var(--proporcao, 4 / 3); object-fit: cover; border-radius: var(--_raio); box-shadow: var(--_sombra); }
+/* botão: ação da marca, WhatsApp verde, agendar no destaque */
+.ib-botao { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; max-width: 100%;
+  padding: 10px 22px; border-radius: var(--ib-raio-botao, 14px); font: 600 16px/1.3 var(--ib-corpo, inherit); text-align: center;
+  text-decoration: none; background: var(--_cor); color: var(--_cor-texto); transition: transform .15s, filter .15s; }
+.ib-botao:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.ib-botao .ic { width: 20px; height: 20px; flex: none; }
+.ib-botao.ib-whatsapp { background: #1fa855; color: #fff; }
+.ib-botao.ib-agendar, .bloco-livre.fundo-cor .ib-botao:not(.ib-whatsapp) { background: var(--_destaque); color: #fff; }
+.ib-botao.ib-agendar { box-shadow: 0 10px 24px color-mix(in srgb, var(--_destaque) 40%, transparent); }
+/* 🧰 os elementos ocupam a largura da coluna e seguem o formato das fotos do bloco */
+.coluna > .carrossel, .coluna > .galeria-livre, .coluna > .faq-livre, .coluna > .video-livre, .coluna > .lista-livre,
+.coluna > .citacao-livre, .coluna > .divisor-livre { width: 100%; }
+.carrossel { position: relative; border-radius: var(--_raio); overflow: hidden; box-shadow: var(--_sombra); }
+.carrossel .trilho { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; }
+.carrossel .trilho::-webkit-scrollbar { display: none; }
+.carrossel img { flex: 0 0 100%; width: 100%; aspect-ratio: var(--proporcao, 4 / 3); object-fit: cover; scroll-snap-align: start; }
+.carrossel .seta { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: 0; border-radius: 50%;
+  background: rgba(255,255,255,.85); color: #222; display: grid; place-items: center; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,.2); }
+.carrossel .seta .ic { width: 20px; height: 20px; }
+.carrossel .ant { left: 10px; } .carrossel .prox { right: 10px; }
+.galeria-livre { display: grid; gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 760px) { .cols-1 .galeria-livre { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.galeria-livre button { padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 12px; overflow: hidden; }
+.galeria-livre img { width: 100%; aspect-ratio: var(--proporcao, 4 / 3); object-fit: cover; }
+.lista-livre { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; text-align: left; }
+.lista-livre li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; }
+.lista-livre li .ic { width: 22px; height: 22px; margin-top: 1px; color: var(--_destaque); }
+.bloco-livre.fundo-cor .lista-livre li .ic { color: inherit; }
+/* 🎨 ícones (icones.py): na cor do texto em volta; o elemento "Ícone" é a bolinha na cor de destaque */
+.bloco-livre .ic { width: 1em; height: 1em; flex: none; display: block; }
+.icone-livre { width: var(--tam, 56px); height: var(--tam, 56px); border-radius: 50%; display: grid; place-items: center; flex: none;
+  background: color-mix(in srgb, var(--_destaque) 16%, transparent); color: var(--_destaque); }
+.icone-livre .ic { width: 52%; height: 52%; }
+.bloco-livre.fundo-cor .icone-livre { background: rgba(255,255,255,.16); color: inherit; }
+/* estilo "emoji": o mesmo lugar e tamanho, com o desenho do aparelho de quem vê */
+.bloco-livre .ic-emoji { width: auto; height: auto; display: inline-grid; place-items: center; line-height: 1; font-size: 1.1em; font-style: normal; }
+.ib-botao .ic-emoji { font-size: 19px; }
+.icone-livre .ic-emoji { font-size: calc(var(--tam, 56px) * .48); }
+.lista-livre li .ic-emoji { width: 22px; height: 22px; font-size: 17px; }
+.carrossel .seta .ic-emoji { font-size: 16px; } .video-livre button .ic-emoji { font-size: 28px; }
+.faq-livre { display: grid; gap: 10px; text-align: left; }
+.faq-livre details { background: var(--_papel); border: 1px solid var(--_linha); border-radius: 14px; padding: 14px 16px; color: var(--ib-tinta, #1d1d1f); }
+.faq-livre summary { cursor: pointer; font-weight: 600; }
+.faq-livre details p { margin: 10px 0 0; }
+.video-livre { position: relative; aspect-ratio: 16 / 9; border-radius: var(--_raio); overflow: hidden; background: #000; box-shadow: var(--_sombra); }
+.video-livre img, .video-livre iframe { width: 100%; height: 100%; object-fit: cover; border: 0; display: block; }
+.video-livre button { position: absolute; inset: 0; margin: auto; width: 72px; height: 72px; border: 0; border-radius: 50%;
+  background: rgba(0,0,0,.65); color: #fff; display: grid; place-items: center; cursor: pointer; }
+.video-livre button .ic { width: 30px; height: 30px; }
+.citacao-livre { margin: 0; padding: 4px 0 4px 18px; border-left: 3px solid var(--_destaque); font: italic 500 clamp(18px, 2.4vw, 22px)/1.5 var(--ib-titulo, inherit); }
+.alin-centro .citacao-livre { border-left: 0; padding-left: 0; }
+.citacao-livre p { margin: 0 0 8px; }
+.citacao-livre cite { display: block; font: 600 14px/1.4 var(--ib-corpo, inherit); font-style: normal; color: var(--_suave); }
+.bloco-livre.fundo-cor .citacao-livre cite { color: inherit; opacity: .85; }
+.divisor-livre { width: 100%; border: 0; border-top: 1px solid var(--_linha); margin: 6px 0; }
+.bloco-livre.fundo-cor .divisor-livre { border-color: rgba(255,255,255,.35); }
+/* foto ampliada da galeria (blocos.js cria) */
+.ib-ampliada { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,.9); display: none; align-items: center; justify-content: center; padding: 16px; }
+.ib-ampliada.aberta { display: flex; }
+.ib-ampliada img { max-height: 90vh; max-width: 100%; border-radius: 10px; }
+.ib-ampliada button { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%; border: 0;
+  background: rgba(255,255,255,.9); color: #222; font-size: 22px; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .ib-botao { transition: none; } .carrossel .trilho { scroll-behavior: auto; } }

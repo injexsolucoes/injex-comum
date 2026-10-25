@@ -5,9 +5,10 @@ Sistema Injex). Assim a gente muda num lugar só e todos pegam na próxima atual
 
 | Parte | O que tem |
 |---|---|
-| `injex_comum/icones.py` | 🎨 Galeria de ícones (127), em 3 estilos: **linha** (padrão), **preenchido** e **emoji**. `svg(nome, estilo)`, `sprite(nomes)`, `para_o_painel()` |
+| `injex_comum/icones.py` | 🎨 Galeria de ícones (146), em 3 estilos: **linha** (padrão), **preenchido** e **emoji**. `svg(nome, estilo)`, `sprite(nomes)`, `para_o_painel()` |
 | `injex_comum/legal.py` | 📜 Política de privacidade, Termos de uso e Política de cookies para os tipos `site`, `agenda`, `loja` e `lanchonete` (`secoes()` + `miolo()`), e o aviso de cookies (`aviso_cookies()`, `CSS_COOKIES`) |
 | `injex_comum/texto.py` | 🔤 Códigos `{nome}`, `{whatsapp}`… (`trocar`), telefone, CNPJ, e-mail |
+| `injex_comum/blocos.py` + `estatico/` | 🧱 Construtor por blocos (1 a 3 colunas, 13 elementos: ícone, título, texto, foto, botão, carrossel, galeria, lista, perguntas, vídeo, frase, linha, espaço). `validar()`, `montar_livre()`, `montar()`; a tela usa `estatico/blocos.css` + `blocos.js` (site) e `editor-blocos.css` + `editor-blocos.js` (editor, `InjexBlocos.editor`). Cada sistema serve esses arquivos em `/comum/<arquivo>` (`arquivo(nome)`). **Responsivo sempre:** ninguém escolhe largura; o bloco decide |
 
 ## Regra de ouro
 

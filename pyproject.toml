@@ -4,10 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "injex-comum"
-version = "1.0.0"
-description = "Peças comuns aos sistemas da Injex Soluções: ícones, páginas legais e textos. Sem dados de clientes."
+version = "1.1.0"
+description = "Peças comuns aos sistemas da Injex Soluções: ícones, páginas legais, textos e construtor de blocos. Sem dados de clientes."
 requires-python = ">=3.11"
 dependencies = []
 
 [tool.setuptools]
 packages = ["injex_comum"]
+
+[tool.setuptools.package-data]
+injex_comum = ["estatico/*"]
