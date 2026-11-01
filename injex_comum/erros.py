@@ -202,9 +202,11 @@ class Registro:
         return len(itens)
 
 
-def arquivo_js():
-    """O vigia das telas (o sistema serve em /comum/erros.js)."""
-    return (ESTATICO / "erros.js").read_text(encoding="utf-8")
+def arquivo_js(nome="erros.js"):
+    """erros.js = o vigia das telas; erros-painel.js = o quadro "Erros do sistema" (o sistema serve em /comum/<nome>)."""
+    if nome not in ("erros.js", "erros-painel.js"):
+        raise KeyError(nome)
+    return (ESTATICO / nome).read_text(encoding="utf-8")
 
 
 async def vigiar_avisos(registro, config_email, intervalo=300):
@@ -227,7 +229,7 @@ def instalar(app, registro, eh_admin, quem_e=None, prefixo="/api/erros", servir_
       (chamar DEPOIS de todos os outros middlewares: este tem que ser o de fora);
     - GET {prefixo} (lista; ?resolvidos=true), GET {prefixo}/resumo (não admin recebe zeros),
       POST {prefixo}/{chave}/resolvido {"resolvido": bool}, POST {prefixo}/tela (aberto, `por_minuto` por endereço);
-    - GET /comum/erros.js (servir_js=False se o sistema já serve /comum/<arquivo>).
+    - GET /comum/erros.js e /comum/erros-painel.js (servir_js=False se o sistema já serve /comum/<arquivo>).
     `eh_admin`: dependência do FastAPI que devolve True/False (e recusa quem não está logado).
     `quem_e(request)`: nome de quem estava logado (roda numa thread, só quando dá erro)."""
     from fastapi import APIRouter, Depends, HTTPException, Request
@@ -313,7 +315,8 @@ def instalar(app, registro, eh_admin, quem_e=None, prefixo="/api/erros", servir_
     rotas.limpar_limite = fila_por_ip.clear  # para os testes
     app.include_router(rotas)
     if servir_js:
-        @app.get("/comum/erros.js", include_in_schema=False)
-        def js():
-            return Response(arquivo_js(), media_type="text/javascript", headers={"Cache-Control": "no-cache"})
+        for nome in ("erros.js", "erros-painel.js"):
+            def js(nome=nome):
+                return Response(arquivo_js(nome), media_type="text/javascript", headers={"Cache-Control": "no-cache"})
+            app.add_api_route(f"/comum/{nome}", js, methods=["GET"], include_in_schema=False)
     return rotas

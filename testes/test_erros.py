@@ -106,3 +106,10 @@ def test_js_servido_e_na_lista_dos_arquivos_comuns(sistema):
     r = c.get("/comum/erros.js")
     assert r.status_code == 200 and "unhandledrejection" in r.text and r.headers["content-type"].startswith("text/javascript")
     assert "InjexErros" in blocos.arquivo("erros.js")
+
+
+def test_painel_servido(sistema):
+    _, c, _ = sistema
+    r = c.get("/comum/erros-painel.js")
+    assert r.status_code == 200 and "InjexErrosPainel" in r.text
+    assert "InjexErrosPainel" in blocos.arquivo("erros-painel.js")
