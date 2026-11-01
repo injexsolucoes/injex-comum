@@ -23,7 +23,7 @@ from .texto import e
 
 ESTATICO = Path(__file__).resolve().parent / "estatico"
 ARQUIVOS = {"blocos.css": "text/css", "blocos.js": "text/javascript", "editor-blocos.css": "text/css",
-            "editor-blocos.js": "text/javascript"}
+            "editor-blocos.js": "text/javascript", "erros.js": "text/javascript"}  # erros.js: módulo erros
 
 MAX_BLOCOS, MAX_ELEMENTOS = 30, 12
 FUNDOS = {"auto": "Automático (alterna)", "claro": "Claro", "cor": "Na cor da marca"}
