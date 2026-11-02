@@ -13,6 +13,7 @@ Sistema Injex). Assim a gente muda num lugar só e todos pegam na próxima atual
 | `injex_comum/estatico/erros-painel.js` | 🚨 Quadro "Erros do sistema" pronto para a tela do administrador: `<script src="/comum/erros-painel.js"></script>` + `InjexErrosPainel.montar(elemento)` (lista, "📋 Copiar para o Claude", "✔ Resolvido"). Sem depender de outro script |
 | `injex_comum/cofre.py` | 🔐 **Cofre** dos segredos (chaves do Mercado Pago, Gemini, senhas): `COFRE = Cofre("LOJA_CHAVE_SENHAS", lambda: DADOS / "chave-senhas.key")`, `trancar_valor(v)` → "cofre:…" para gravar, `abrir_valor(v)` para ler (valor antigo sem "cofre:" volta igual). Precisa de `cryptography` |
 | `injex_comum/cripto_backup.py` | 🔐 **Backup trancado** (AES-256-GCM): `TRANCA = Tranca("LOJA_CHAVE_BACKUP", lambda: DADOS / "chave-backup.key", magico=b"LOJABK01")`, `trancar(zip, destino)`, `with aberto(arquivo) as zip_comum:` (abre antigo ou trancado). A chave nunca vai no backup: guardar uma cópia. Precisa de `cryptography` |
+| `injex_comum/limites.py` | 🚦 **Limite nas rotas abertas** (02/11/2026): `limites.instalar(app, [("/api/menu/pedir", 10), ("/api/menu/", 60)])` (antes do `erros.instalar`). Só conta quem grava (POST/PUT/PATCH/DELETE), por endereço, janela de 1 min (passou = 429 "Espere um minuto"); corpo acima de `corpo_max` (256 KB) = 413. Nos testes dos sistemas: `INJEX_LIMITES_DESLIGADOS=1` no conftest |
 
 ## Regra de ouro
 
