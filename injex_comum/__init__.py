@@ -5,4 +5,4 @@ Só o que é genérico e igual para todos: a galeria de ícones (`icones`), as p
 cada cliente ficam no sistema dele e só passam por aqui na hora de montar uma página.
 """
 
-VERSAO = "1.3.0"
+VERSAO = "1.7.0"

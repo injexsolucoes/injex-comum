@@ -1,5 +1,5 @@
 // 🚨 Quadro "Erros do sistema" — módulo comum da Injex (injex_comum/erros.py). Mostra os erros em aberto (ou os
-// resolvidos), com onde, quem, a origem no código e o caminho, "📋 Copiar para o Claude" e "✔ Resolvido".
+// resolvidos), com onde, quem, a origem no código e o caminho, "📋 Copiar para o responsável" e "✔ Resolvido".
 // Uso (página só do administrador):  <div id="erros"></div>
 //   <script src="/comum/erros-painel.js"></script>
 //   <script>InjexErrosPainel.montar(document.getElementById("erros"))</script>
@@ -47,8 +47,8 @@
       e.pilha ? el("details", {}, el("summary", { style: "color:#555;cursor:pointer" }, "Caminho no código"),
         el("pre", { style: "white-space:pre-wrap;font-size:12px" }, e.pilha)) : null,
       el("div", { style: "display:flex;gap:8px;margin-top:6px;flex-wrap:wrap" },
-        botao("📋 Copiar para o Claude", async () => {
-          try { await navigator.clipboard.writeText(texto); recado("Copiado: cole na conversa com o Claude."); }
+        botao("📋 Copiar para o responsável", async () => {
+          try { await navigator.clipboard.writeText(texto); recado("Copiado: mande para o responsável."); }
           catch (_) { recado("Não consegui copiar.", true); }
         }),
         botao(e.resolvido ? "↩ Voltar para em aberto" : "✔ Resolvido", async () => {
@@ -76,7 +76,7 @@
     alvo.replaceChildren(
       el("p", { style: "color:#555;margin:0 0 8px" }, "Todo erro inesperado (no servidor ou numa tela) fica aqui com onde ",
         "aconteceu, quem estava usando e a origem (arquivo e linha do código). Erro novo manda um e-mail e aparece no Início. ",
-        "Para corrigir: \"📋 Copiar para o Claude\". Corrigido e no ar → \"✔ Resolvido\" (se acontecer de novo, ele volta e avisa)."),
+        "Para corrigir: \"📋 Copiar para o responsável\". Corrigido e no ar → \"✔ Resolvido\" (se acontecer de novo, ele volta e avisa)."),
       el("div", { style: "display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px" },
         el("button", { type: "button", style: "padding:6px 12px;border-radius:8px;font:inherit;cursor:pointer", onclick: carregar }, "🔄 Atualizar"),
         el("label", { style: "color:#555" }, resolvidos, " Ver os já resolvidos")),

@@ -180,7 +180,7 @@ class Registro:
             partes.append(f"• {e['tipo']}: {e['mensagem']}\n  Onde: {e['onde']} · {e['rota'] or e['tela']}\n"
                           f"  Origem: {e['origem']}\n  Quem: {e['usuario'] or '(ninguém logado)'} · {e['ultima']} · "
                           f"{e['vezes']} vez(es)\n")
-        partes.append("Mande este e-mail para o Claude corrigir (ele começa escrevendo um teste que repete o erro).")
+        partes.append("Mande este e-mail para o responsável corrigir (a correção começa por um teste que repete o erro).")
         return "\n".join(partes)
 
     def enviar_avisos(self, remetente, senha, destino):

@@ -113,3 +113,17 @@ def test_painel_servido(sistema):
     r = c.get("/comum/erros-painel.js")
     assert r.status_code == 200 and "InjexErrosPainel" in r.text
     assert "InjexErrosPainel" in blocos.arquivo("erros-painel.js")
+
+
+def test_textos_falam_no_responsavel_nunca_no_claude():
+    """Regra da dona (06/11/2026): nada que aparece para quem usa o sistema cita o Claude nem a dona; é "o responsável"."""
+    from pathlib import Path
+
+    from injex_comum import erros
+    r = erros.Registro.__new__(erros.Registro)
+    r.sistema, r.onde_ver = "Sistema X", "Configurações › Erros"
+    texto = r.texto_do_email([{"tipo": "ValueError", "mensagem": "x", "onde": "servidor", "rota": "/a", "tela": "", "origem": "a.py:1",
+                               "usuario": "", "ultima": "hoje", "vezes": 1}])
+    assert "Claude" not in texto and "responsável" in texto
+    painel = (Path(erros.__file__).parent / "estatico" / "erros-painel.js").read_text(encoding="utf-8")
+    assert "Claude" not in painel and "dona" not in painel
